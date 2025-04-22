@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -27,20 +26,40 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
   const [name, setName] = useState('');
   const [college, setCollege] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState('');
-  
+  const [collegeIdFile, setCollegeIdFile] = useState<File | null>(null);
+  const [collegeIdFileName, setCollegeIdFileName] = useState('');
+  const [collegeMail, setCollegeMail] = useState('');
+  const [linkedinId, setLinkedinId] = useState('');
+
   const { toast } = useToast();
+
+  const handleCollegeIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCollegeIdFile(file);
+      setCollegeIdFileName(file.name);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Mock authentication for demo purposes
-    if (selectedTab === 'signup' && (!name || !email || !password || (mode === 'mentor' && !college))) {
-      toast({
-        title: "Please complete all fields",
-        description: "All fields are required to create an account.",
-        variant: "destructive",
-      });
-      return;
+    if (selectedTab === 'signup') {
+      if (
+        !name ||
+        !email ||
+        !password ||
+        (mode === 'mentor' && !college) ||
+        (mode === 'mentor' && !collegeIdFile)
+      ) {
+        toast({
+          title: "Please complete all fields",
+          description:
+            "All fields are required to create an account. Mentor Verification requires College ID.",
+          variant: "destructive",
+        });
+        return;
+      }
     }
     
     if (selectedTab === 'login' && (!email || !password)) {
@@ -52,13 +71,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
       return;
     }
     
-    // Show success message
     toast({
       title: selectedTab === 'login' ? "Login successful" : "Account created!",
-      description: selectedTab === 'login' 
-        ? "Welcome back to Elophaz!" 
-        : `Your ${mode} account has been created successfully.`,
+      description:
+        selectedTab === 'login'
+          ? "Welcome back to Elophaz!"
+          : `Your ${mode} account has been created successfully.`,
     });
+    
+    setCollegeIdFile(null);
+    setCollegeIdFileName('');
+    setCollegeMail('');
+    setLinkedinId('');
     
     onClose();
   };
@@ -145,6 +169,74 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
                   />
                 </div>
               </div>
+              
+              {/* Mentor Verification Section */}
+              {mode === 'mentor' && (
+                <div className="mt-6 border rounded-lg p-4 bg-gray-50 space-y-4 shadow-inner">
+                  <h4 className="font-semibold text-base flex items-center gap-2 mb-2">
+                    Mentor Verification
+                  </h4>
+                  <div className="space-y-3">
+                    <div>
+                      <Label className="flex items-center gap-1" htmlFor="collegeId">
+                        <span>College ID <span className="text-red-500">*</span></span>
+                      </Label>
+                      <div className="flex items-center gap-3 mt-1">
+                        <label
+                          htmlFor="collegeId"
+                          className="cursor-pointer flex items-center gap-2 px-3 py-2 bg-white border-2 border-dashed border-elophaz-primary rounded-md hover:bg-elophaz-primary/10 transition-colors"
+                        >
+                          <input
+                            id="collegeId"
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            onChange={handleCollegeIdChange}
+                            required
+                          />
+                          <span className="pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="inline-block mr-1" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect width="18" height="14" x="3" y="5" rx="2"/><path d="M7 16V7M17 16v-6m0-2V7m-10 0V6"/></svg>
+                            Upload File
+                          </span>
+                          <span className="text-sm text-gray-600">{collegeIdFileName || 'No file chosen'}</span>
+                        </label>
+                      </div>
+                      <span className="block text-xs text-gray-500 mt-1">
+                        Upload your valid college ID card/photo (PDF, JPG, PNG)
+                      </span>
+                    </div>
+                    <div>
+                      <Label htmlFor="collegeMail" className="flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="mr-1" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M16 8a6 6 0 0 1 6 6v6H2v-6a6 6 0 0 1 6-6h8Z"/><circle cx="8.5" cy="10.5" r=".5"/><rect x="8" y="12" width="1.5" height="4.5"/></svg>
+                        College Email (optional)
+                      </Label>
+                      <Input
+                        id="collegeMail"
+                        type="email"
+                        placeholder="your.college@email.edu"
+                        value={collegeMail}
+                        onChange={(e) => setCollegeMail(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="linkedinId" className="flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="mr-1" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M16 8a6 6 0 0 1 6 6v6H2v-6a6 6 0 0 1 6-6h8Z"/><circle cx="8.5" cy="10.5" r=".5"/><rect x="8" y="12" width="1.5" height="4.5"/></svg>
+                        LinkedIn Profile (optional)
+                      </Label>
+                      <Input
+                        id="linkedinId"
+                        type="text"
+                        placeholder="https://linkedin.com/in/username"
+                        value={linkedinId}
+                        onChange={(e) => setLinkedinId(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Only verified mentors can offer paid calls.
+                  </p>
+                </div>
+              )}
               
               <Button 
                 type="submit"
