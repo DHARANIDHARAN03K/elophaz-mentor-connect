@@ -17,10 +17,11 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   mode: 'student' | 'mentor';
+  tabDefault?: 'login' | 'signup';
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
-  const [selectedTab, setSelectedTab] = useState<'login' | 'signup'>('signup');
+const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault = 'signup' }) => {
+  const [selectedTab, setSelectedTab] = useState<'login' | 'signup'>(tabDefault);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -103,7 +104,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
         </DialogHeader>
 
         <Tabs 
-          defaultValue={selectedTab} 
+          defaultValue={tabDefault} 
           value={selectedTab}
           onValueChange={(value) => setSelectedTab(value as 'login' | 'signup')} 
           className="w-full"
@@ -170,7 +171,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode }) => {
                 </div>
               </div>
               
-              {/* Mentor Verification Section */}
               {mode === 'mentor' && (
                 <div className="mt-6 border rounded-lg p-4 bg-gray-50 space-y-4 shadow-inner">
                   <h4 className="font-semibold text-base flex items-center gap-2 mb-2">
