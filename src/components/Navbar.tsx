@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Search, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import AuthModal from './AuthModal';
 
 const Navbar: React.FC = () => {
@@ -31,13 +31,6 @@ const Navbar: React.FC = () => {
           <a href="#faq" className="text-gray-600 hover:text-elophaz-primary transition-colors">FAQ</a>
           
           <div className="flex items-center gap-3">
-            <Button 
-              variant="outline" 
-              className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10"
-              onClick={() => openAuthModal('student')}
-            >
-              Join as Student
-            </Button>
             <Button 
               className="bg-elophaz-primary hover:bg-elophaz-primary/90"
               onClick={() => openAuthModal('mentor')}
@@ -84,13 +77,6 @@ const Navbar: React.FC = () => {
             </a>
             
             <div className="flex flex-col gap-3 pt-2">
-              <Button 
-                variant="outline" 
-                className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10 w-full"
-                onClick={() => openAuthModal('student')}
-              >
-                Join as Student
-              </Button>
               <Button 
                 className="bg-elophaz-primary hover:bg-elophaz-primary/90 w-full"
                 onClick={() => openAuthModal('mentor')}
