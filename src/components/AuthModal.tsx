@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -90,7 +91,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md md:max-w-lg">
+      <DialogContent className="sm:max-w-md md:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center mb-1">
             {mode === 'student' ? 'Join as Student' : 'Become a Mentor'}
@@ -238,12 +239,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
                 </div>
               )}
               
-              <Button 
-                type="submit"
-                className="w-full bg-elophaz-primary hover:bg-elophaz-primary/90"
-              >
-                Create Account
-              </Button>
+              <div className="pt-2 pb-6">
+                <Button 
+                  type="submit"
+                  className="w-full bg-elophaz-primary hover:bg-elophaz-primary/90"
+                >
+                  Create Account
+                </Button>
+              </div>
               
               <p className="text-xs text-center text-gray-500 mt-4">
                 By signing up, you agree to our Terms of Service and Privacy Policy.
