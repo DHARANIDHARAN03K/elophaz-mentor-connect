@@ -14,6 +14,17 @@ import AvatarSelection from './AvatarSelection';
 import { useToast } from '@/hooks/use-toast';
 import { Facebook } from 'lucide-react';
 
+const GoogleIcon = () => (
+  <svg className="mr-2" width="20" height="20" viewBox="0 0 48 48">
+    <g>
+      <path fill="#4285F4" d="M44.5 20H24v8.5h11.7C34.8 33.4 30.1 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.1 8.1 2.9l6.1-6.1C34.6 6 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.4-.2-3.5z"/>
+      <path fill="#34A853" d="M6.3 14.6l7 5.1C15.4 17.1 19.3 14 24 14c3.1 0 5.9 1.1 8.1 2.9l6.1-6.1C34.6 6 29.6 4 24 4 15.9 4 8.6 9.9 6.3 14.6z"/>
+      <path fill="#FBBC05" d="M24 44c5.3 0 9.7-1.7 12.8-4.6l-5.9-4.8c-2.1 1.5-5 2.4-6.9 2.4-6.1 0-11.2-4.1-13.1-9.7l-6.7 5.2C8.3 42.2 15.4 44 24 44z"/>
+      <path fill="#EA4335" d="M44.5 20H24v8.5h11.7c-1.4 3.6-4.7 6.2-11.7 6.2-7.2 0-13.2-5.8-13.2-13S16.8 8 24 8c3.6 0 6.9 1.3 9.5 3.4l7.2-7.2C36.4 2 30.6 0 24 0 10.8 0 0 10.8 0 24c0 13.2 10.8 24 24 24 13.2 0 24-10.8 24-24 0-1.7-.2-3.3-.5-5z"/>
+    </g>
+  </svg>
+);
+
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -105,30 +116,43 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
             {mode === 'student' ? 'Join as Student' : 'Become a Mentor'}
           </DialogTitle>
           <DialogDescription className="text-center">
-            {mode === 'student' 
-              ? 'Connect with college mentors for authentic insights' 
+            {mode === 'student'
+              ? 'Connect with college mentors for authentic insights'
               : 'Share your college experience and earn by helping students'
             }
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs 
-          defaultValue={tabDefault} 
+        <Tabs
+          defaultValue={tabDefault}
           value={selectedTab}
-          onValueChange={(value) => setSelectedTab(value as 'login' | 'signup')} 
+          onValueChange={(value) => setSelectedTab(value as 'login' | 'signup')}
           className="w-full"
         >
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
             <TabsTrigger value="login">Log In</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="signup">
             <Button
               type="button"
               variant="outline"
-              className="w-full flex items-center justify-center border border-gray-200 gap-2 mb-4 bg-white hover:bg-gray-50 text-gray-800"
+              className="w-full flex items-center justify-center border border-gray-200 gap-2 mb-2 bg-white hover:bg-gray-50 text-gray-800"
               onClick={handleGoogleSignup}
+            >
+              <GoogleIcon />
+              Sign up with Google
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full flex items-center justify-center border border-gray-200 gap-2 mb-4 bg-white hover:bg-gray-50 text-gray-800"
+              onClick={() => toast({
+                title: 'Facebook Sign Up',
+                description: 'Facebook sign up not yet implemented.',
+                variant: 'default'
+              })}
             >
               <Facebook className="mr-2" />
               Sign up with Facebook
