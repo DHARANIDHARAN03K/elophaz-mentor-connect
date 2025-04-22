@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AvatarSelection from './AvatarSelection';
 import { useToast } from '@/hooks/use-toast';
+import { Google } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -89,6 +90,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
     onClose();
   };
 
+  const handleGoogleSignup = () => {
+    toast({
+      title: 'Google Sign Up',
+      description: 'Google sign up not yet implemented.',
+      variant: 'default'
+    });
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md md:max-w-lg max-h-[90vh] overflow-y-auto">
@@ -116,6 +125,22 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
           </TabsList>
           
           <TabsContent value="signup">
+            {/* Google Signup Button */}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full flex items-center justify-center border border-gray-200 gap-2 mb-4 bg-white hover:bg-gray-50 text-gray-800"
+              onClick={handleGoogleSignup}
+            >
+              <Google className="mr-2" />
+              Sign up with Google
+            </Button>
+            {/* Divider */}
+            <div className="flex items-center my-2 gap-2">
+              <div className="h-px bg-gray-200 flex-1" />
+              <span className="text-xs text-gray-400">OR</span>
+              <div className="h-px bg-gray-200 flex-1" />
+            </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -300,3 +325,4 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
 };
 
 export default AuthModal;
+
