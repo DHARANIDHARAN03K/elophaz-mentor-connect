@@ -8,9 +8,15 @@ const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'student' | 'mentor'>('student');
-  
-  const openAuthModal = (mode: 'student' | 'mentor') => {
+  const [authTab, setAuthTab] = useState<'login' | 'signup'>('signup');
+
+  // Open AuthModal in correct mode (student/mentor) and tab (signup/login)
+  const openAuthModal = (
+    mode: 'student' | 'mentor',
+    tab: 'signup' | 'login' = 'signup'
+  ) => {
     setAuthMode(mode);
+    setAuthTab(tab);
     setIsAuthModalOpen(true);
     setIsMenuOpen(false);
   };
@@ -33,9 +39,23 @@ const Navbar: React.FC = () => {
           <div className="flex items-center gap-3">
             <Button 
               className="bg-elophaz-primary hover:bg-elophaz-primary/90"
-              onClick={() => openAuthModal('mentor')}
+              onClick={() => openAuthModal('mentor', 'signup')}
             >
               Become a Mentor
+            </Button>
+            <Button
+              variant="outline"
+              className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10"
+              onClick={() => openAuthModal('student', 'signup')}
+            >
+              Sign Up
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-elophaz-primary"
+              onClick={() => openAuthModal('student', 'login')}
+            >
+              Log In
             </Button>
           </div>
         </div>
@@ -79,19 +99,34 @@ const Navbar: React.FC = () => {
             <div className="flex flex-col gap-3 pt-2">
               <Button 
                 className="bg-elophaz-primary hover:bg-elophaz-primary/90 w-full"
-                onClick={() => openAuthModal('mentor')}
+                onClick={() => openAuthModal('mentor', 'signup')}
               >
                 Become a Mentor
+              </Button>
+              <Button
+                variant="outline"
+                className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10 w-full"
+                onClick={() => openAuthModal('student', 'signup')}
+              >
+                Sign Up
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-elophaz-primary w-full"
+                onClick={() => openAuthModal('student', 'login')}
+              >
+                Log In
               </Button>
             </div>
           </div>
         </div>
       )}
-      
+
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
         mode={authMode} 
+        tabDefault={authTab}
       />
     </>
   );
