@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -13,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AvatarSelection from './AvatarSelection';
 import { useToast } from '@/hooks/use-toast';
-import { Google } from 'lucide-react';
+import { Facebook } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -125,17 +124,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
           </TabsList>
           
           <TabsContent value="signup">
-            {/* Google Signup Button */}
             <Button
               type="button"
               variant="outline"
               className="w-full flex items-center justify-center border border-gray-200 gap-2 mb-4 bg-white hover:bg-gray-50 text-gray-800"
               onClick={handleGoogleSignup}
             >
-              <Google className="mr-2" />
-              Sign up with Google
+              <Facebook className="mr-2" />
+              Sign up with Facebook
             </Button>
-            {/* Divider */}
             <div className="flex items-center my-2 gap-2">
               <div className="h-px bg-gray-200 flex-1" />
               <span className="text-xs text-gray-400">OR</span>
@@ -325,4 +322,3 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
 };
 
 export default AuthModal;
-
