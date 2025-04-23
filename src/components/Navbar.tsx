@@ -3,6 +3,16 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import AuthModal from './AuthModal';
+import DashboardMenu from './DashboardMenu';
+
+// Simulate getting user and role from props, context, or Supabase.
+// Replace with your actual Supabase logic.
+const getCurrentUser = () => {
+  // Example: adapt this for Supabase
+  // return { role: 'student', email: 'student@email.com' } or null
+  // Replace this logic with supabase.auth.getUser() and your roles logic
+  return window.localStorage.getItem("userRole") // 'student' | 'mentor' | null
+}
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +20,17 @@ const Navbar: React.FC = () => {
   const [authMode, setAuthMode] = useState<'student' | 'mentor'>('student');
   const [authTab, setAuthTab] = useState<'login' | 'signup'>('signup');
 
-  // Open AuthModal in correct mode (student/mentor) and tab (signup/login)
+  // Simulated user auth and role (replace this with your actual logic)
+  const userRole = getCurrentUser() as "student" | "mentor" | null;
+
+  // Logout handler (replace with your real logic, e.g., Supabase signOut)
+  const handleLogout = () => {
+    // Remove user info (adapt this to your auth)
+    window.localStorage.removeItem("userRole");
+    window.location.href = "/";
+  };
+
+  // Open AuthModal in correct mode and tab
   const openAuthModal = (
     mode: 'student' | 'mentor',
     tab: 'signup' | 'login' = 'signup'
@@ -20,6 +40,19 @@ const Navbar: React.FC = () => {
     setIsAuthModalOpen(true);
     setIsMenuOpen(false);
   };
+
+  // Navigation links for role
+  const studentLinks = [
+    { label: "Home", href: "/" },
+    { label: "Features", href: "#features" },
+    { label: "Mentors", href: "#mentors" },
+    { label: "FAQ", href: "#faq" },
+  ];
+  const mentorLinks = [
+    { label: "Home", href: "/" },
+    { label: "Features", href: "#features" },
+    { label: "FAQ", href: "#faq" },
+  ];
 
   return (
     <>
@@ -32,32 +65,46 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          <a href="#features" className="text-gray-600 hover:text-elophaz-primary transition-colors">Features</a>
-          <a href="#mentors" className="text-gray-600 hover:text-elophaz-primary transition-colors">Mentors</a>
-          <a href="#faq" className="text-gray-600 hover:text-elophaz-primary transition-colors">FAQ</a>
-          
-          <div className="flex items-center gap-3">
-            <Button 
-              className="bg-elophaz-primary hover:bg-elophaz-primary/90"
-              onClick={() => openAuthModal('mentor', 'signup')}
+          {(userRole === "student" ? studentLinks : mentorLinks).map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="text-gray-600 hover:text-elophaz-primary transition-colors"
             >
-              Become a Mentor
-            </Button>
-            <Button
-              variant="outline"
-              className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10"
-              onClick={() => openAuthModal('student', 'signup')}
-            >
-              Sign Up
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-elophaz-primary"
-              onClick={() => openAuthModal('student', 'login')}
-            >
-              Log In
-            </Button>
-          </div>
+              {link.label}
+            </a>
+          ))}
+
+          {userRole && (
+            <>
+              <DashboardMenu role={userRole} onLogout={handleLogout} />
+            </>
+          )}
+
+          {!userRole && (
+            <div className="flex items-center gap-3">
+              <Button 
+                className="bg-elophaz-primary hover:bg-elophaz-primary/90"
+                onClick={() => openAuthModal('mentor', 'signup')}
+              >
+                Become a Mentor
+              </Button>
+              <Button
+                variant="outline"
+                className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10"
+                onClick={() => openAuthModal('student', 'signup')}
+              >
+                Sign Up
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-elophaz-primary"
+                onClick={() => openAuthModal('student', 'login')}
+              >
+                Log In
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -74,50 +121,47 @@ const Navbar: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden fixed top-16 left-0 right-0 bg-white z-40 shadow-md animate-fade-in py-4 px-6">
           <div className="flex flex-col gap-4">
-            <a 
-              href="#features" 
-              className="text-gray-600 hover:text-elophaz-primary transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Features
-            </a>
-            <a 
-              href="#mentors" 
-              className="text-gray-600 hover:text-elophaz-primary transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Mentors
-            </a>
-            <a 
-              href="#faq" 
-              className="text-gray-600 hover:text-elophaz-primary transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              FAQ
-            </a>
-            
-            <div className="flex flex-col gap-3 pt-2">
-              <Button 
-                className="bg-elophaz-primary hover:bg-elophaz-primary/90 w-full"
-                onClick={() => openAuthModal('mentor', 'signup')}
+            {(userRole === "student" ? studentLinks : mentorLinks).map((link) => (
+              <a 
+                key={link.label}
+                href={link.href}
+                className="text-gray-600 hover:text-elophaz-primary transition-colors py-2"
+                onClick={() => setIsMenuOpen(false)}
               >
-                Become a Mentor
-              </Button>
-              <Button
-                variant="outline"
-                className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10 w-full"
-                onClick={() => openAuthModal('student', 'signup')}
-              >
-                Sign Up
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-elophaz-primary w-full"
-                onClick={() => openAuthModal('student', 'login')}
-              >
-                Log In
-              </Button>
-            </div>
+                {link.label}
+              </a>
+            ))}
+
+            {userRole && (
+              <div className="flex flex-col gap-3 pt-2">
+                <DashboardMenu role={userRole} onLogout={handleLogout} />
+              </div>
+            )}
+
+            {!userRole && (
+              <div className="flex flex-col gap-3 pt-2">
+                <Button 
+                  className="bg-elophaz-primary hover:bg-elophaz-primary/90 w-full"
+                  onClick={() => openAuthModal('mentor', 'signup')}
+                >
+                  Become a Mentor
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10 w-full"
+                  onClick={() => openAuthModal('student', 'signup')}
+                >
+                  Sign Up
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="text-elophaz-primary w-full"
+                  onClick={() => openAuthModal('student', 'login')}
+                >
+                  Log In
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}
