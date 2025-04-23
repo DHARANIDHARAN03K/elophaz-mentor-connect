@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -45,6 +46,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
   const [linkedinId, setLinkedinId] = useState('');
 
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleCollegeIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -98,6 +100,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
     setLinkedinId('');
     
     onClose();
+    
+    const redirectPath = mode === 'mentor' ? '/mentor/dashboard' : '/student/dashboard';
+    navigate(redirectPath);
   };
 
   const handleGoogleSignup = () => {
@@ -106,6 +111,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
       description: 'Google sign up not yet implemented.',
       variant: 'default'
     });
+    
+    const redirectPath = mode === 'mentor' ? '/mentor/dashboard' : '/student/dashboard';
+    navigate(redirectPath);
+    onClose();
   };
 
   return (
