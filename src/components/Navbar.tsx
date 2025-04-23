@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import AuthModal from './AuthModal';
@@ -19,14 +19,41 @@ const Navbar: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'student' | 'mentor'>('student');
   const [authTab, setAuthTab] = useState<'login' | 'signup'>('signup');
+  // Add state to trigger re-render when user logs in/out
+  const [userRole, setUserRole] = useState<"student" | "mentor" | null>(getCurrentUser() as "student" | "mentor" | null);
 
-  // Simulated user auth and role (replace this with your actual logic)
-  const userRole = getCurrentUser() as "student" | "mentor" | null;
+  // Update userRole when localStorage changes
+  useEffect(() => {
+    const checkUserRole = () => {
+      setUserRole(getCurrentUser() as "student" | "mentor" | null);
+    };
+
+    // Check on mount
+    checkUserRole();
+
+    // Listen for storage events (when localStorage changes)
+    window.addEventListener('storage', checkUserRole);
+    
+    // Custom event for when we update localStorage ourselves
+    window.addEventListener('userRoleChanged', checkUserRole);
+    
+    return () => {
+      window.removeEventListener('storage', checkUserRole);
+      window.removeEventListener('userRoleChanged', checkUserRole);
+    };
+  }, []);
 
   // Logout handler (replace with your real logic, e.g., Supabase signOut)
   const handleLogout = () => {
     // Remove user info (adapt this to your auth)
     window.localStorage.removeItem("userRole");
+    
+    // Trigger a re-render by updating the state
+    setUserRole(null);
+    
+    // Dispatch event to notify other components
+    window.dispatchEvent(new Event('userRoleChanged'));
+    
     window.location.href = "/";
   };
 

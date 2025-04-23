@@ -86,6 +86,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
       return;
     }
     
+    window.localStorage.setItem("userRole", mode);
+    
     toast({
       title: selectedTab === 'login' ? "Login successful" : "Account created!",
       description:
@@ -106,6 +108,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
   };
 
   const handleGoogleSignup = () => {
+    window.localStorage.setItem("userRole", mode);
+    
     toast({
       title: 'Google Sign Up',
       description: 'Google sign up not yet implemented.',
