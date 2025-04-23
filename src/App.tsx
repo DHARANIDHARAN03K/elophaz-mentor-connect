@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import MentorDashboard from "./pages/MentorDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
+import WelcomeStudent from "./pages/WelcomeStudent";
+import WelcomeMentor from "./pages/WelcomeMentor";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/welcome/student" element={<WelcomeStudent />} />
+          <Route path="/welcome/mentor" element={<WelcomeMentor />} />
           <Route path="/mentor/dashboard" element={<MentorDashboard />} />
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

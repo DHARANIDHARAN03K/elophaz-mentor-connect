@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -108,8 +107,19 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
     
     onClose();
     
-    const redirectPath = mode === 'mentor' ? '/mentor/dashboard' : '/student/dashboard';
-    navigate(redirectPath);
+    // Modify the redirection logic here to go to a different page after signup vs login
+    if (selectedTab === 'signup') {
+      // After signup, go to welcome page route for each user type
+      if (mode === 'student') {
+        navigate('/welcome/student'); // You'll create this route
+      } else {
+        navigate('/welcome/mentor'); // You'll create this route
+      }
+    } else {
+      // For login, keep the original dashboard redirect
+      const redirectPath = mode === 'mentor' ? '/mentor/dashboard' : '/student/dashboard';
+      navigate(redirectPath);
+    }
   };
 
   const handleGoogleSignup = () => {
@@ -124,8 +134,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
       variant: 'default'
     });
     
-    const redirectPath = mode === 'mentor' ? '/mentor/dashboard' : '/student/dashboard';
-    navigate(redirectPath);
+    // Modify the Google sign up redirect to also go to welcome pages
+    if (selectedTab === 'signup') {
+      const welcomePath = mode === 'mentor' ? '/welcome/mentor' : '/welcome/student';
+      navigate(welcomePath);
+    } else {
+      const dashboardPath = mode === 'mentor' ? '/mentor/dashboard' : '/student/dashboard';
+      navigate(dashboardPath);
+    }
+    
     onClose();
   };
 
