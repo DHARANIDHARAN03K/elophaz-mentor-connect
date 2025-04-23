@@ -5,13 +5,10 @@ import { Menu, X } from 'lucide-react';
 import AuthModal from './AuthModal';
 import DashboardMenu from './DashboardMenu';
 
-// Simulate getting user and role from props, context, or Supabase.
-// Replace with your actual Supabase logic.
+// Simulate getting user and role from localStorage.
+// Replace with your actual Supabase logic when ready.
 const getCurrentUser = () => {
-  // Example: adapt this for Supabase
-  // return { role: 'student', email: 'student@email.com' } or null
-  // Replace this logic with supabase.auth.getUser() and your roles logic
-  return window.localStorage.getItem("userRole") // 'student' | 'mentor' | null
+  return window.localStorage.getItem("userRole"); // 'student' | 'mentor' | null
 }
 
 const Navbar: React.FC = () => {
@@ -44,9 +41,17 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  // Logout handler (replace with your real logic, e.g., Supabase signOut)
+  // Force a role check on every route change/page load
+  useEffect(() => {
+    const currentRole = getCurrentUser();
+    if (currentRole !== userRole) {
+      setUserRole(currentRole as "student" | "mentor" | null);
+    }
+  }, [window.location.pathname]);
+
+  // Logout handler 
   const handleLogout = () => {
-    // Remove user info (adapt this to your auth)
+    // Remove user info
     window.localStorage.removeItem("userRole");
     
     // Trigger a re-render by updating the state
