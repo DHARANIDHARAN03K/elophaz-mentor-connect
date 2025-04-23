@@ -62,7 +62,7 @@ const StudentDashboard: React.FC = () => {
                 <img src={mentor.avatar} alt={mentor.name} className="w-12 h-12 rounded-full" />
                 <div>
                   <p className="font-medium">{mentor.name}</p>
-                  <p className="text-gray-500 text-sm">{mentor.branch} • {mentor.year}</p>
+                  <p className="text-gray-500 text-sm">{mentor.department} • {mentor.year}</p>
                 </div>
               </div>
               <Button size="sm" className="bg-elophaz-primary text-white">Request Connection</Button>
@@ -75,4 +75,3 @@ const StudentDashboard: React.FC = () => {
 };
 
 export default StudentDashboard;
-
