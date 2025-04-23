@@ -19,19 +19,20 @@ const Navbar: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'student' | 'mentor'>('student');
   const [authTab, setAuthTab] = useState<'login' | 'signup'>('signup');
-  // Add state to trigger re-render when user logs in/out
+  // Add state to track user role
   const [userRole, setUserRole] = useState<"student" | "mentor" | null>(getCurrentUser() as "student" | "mentor" | null);
 
   // Update userRole when localStorage changes
   useEffect(() => {
     const checkUserRole = () => {
-      setUserRole(getCurrentUser() as "student" | "mentor" | null);
+      const currentRole = getCurrentUser();
+      setUserRole(currentRole as "student" | "mentor" | null);
     };
 
-    // Check on mount
+    // Check on mount and when component re-renders
     checkUserRole();
 
-    // Listen for storage events (when localStorage changes)
+    // Listen for storage events (when localStorage changes in other tabs)
     window.addEventListener('storage', checkUserRole);
     
     // Custom event for when we update localStorage ourselves

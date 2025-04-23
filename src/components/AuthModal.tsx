@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -88,6 +89,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
     
     window.localStorage.setItem("userRole", mode);
     
+    // Dispatch event to notify components of role change
+    window.dispatchEvent(new Event('userRoleChanged'));
+    
     toast({
       title: selectedTab === 'login' ? "Login successful" : "Account created!",
       description:
@@ -109,6 +113,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
 
   const handleGoogleSignup = () => {
     window.localStorage.setItem("userRole", mode);
+    
+    // Dispatch event to notify components of role change
+    window.dispatchEvent(new Event('userRoleChanged'));
     
     toast({
       title: 'Google Sign Up',
