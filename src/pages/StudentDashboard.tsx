@@ -59,10 +59,10 @@ const StudentDashboard: React.FC = () => {
               className="border rounded-lg p-4 bg-white flex items-center justify-between"
             >
               <div className="flex items-center gap-4">
-                <img src={mentor.avatar} alt={mentor.name} className="w-12 h-12 rounded-full" />
+                <img src={mentor.avatar} alt={mentor.anonymousName} className="w-12 h-12 rounded-full" />
                 <div>
-                  <p className="font-medium">{mentor.name}</p>
-                  <p className="text-gray-500 text-sm">{mentor.department} • {mentor.year}</p>
+                  <p className="font-medium">{mentor.anonymousName}</p>
+                  <p className="text-gray-500 text-sm">{mentor.department} • {mentor.gender}</p>
                 </div>
               </div>
               <Button size="sm" className="bg-elophaz-primary text-white">Request Connection</Button>

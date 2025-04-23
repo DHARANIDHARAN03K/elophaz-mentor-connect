@@ -1,4 +1,3 @@
-
 // Mock data for the Elophaz mentor-connect platform
 
 // Anime avatar URLs
@@ -46,6 +45,8 @@ export const mentors = [
   {
     id: "m1",
     name: "Arjun Kumar",
+    anonymousName: "RT456s",
+    gender: "Male",
     college: "IIT Delhi",
     department: "Computer Science",
     year: 3,
@@ -63,6 +64,8 @@ export const mentors = [
   {
     id: "m2",
     name: "Sneha Patel",
+    anonymousName: "QJ782p",
+    gender: "Female",
     college: "IIT Bombay",
     department: "Electrical Engineering",
     year: 4,
@@ -80,6 +83,8 @@ export const mentors = [
   {
     id: "m3",
     name: "Vikram Singh",
+    anonymousName: "ZX210b",
+    gender: "Male",
     college: "BITS Pilani",
     department: "Mechanical Engineering",
     year: 2,
@@ -97,6 +102,8 @@ export const mentors = [
   {
     id: "m4",
     name: "Meera Iyer",
+    anonymousName: "PL690z",
+    gender: "Female",
     college: "NIT Trichy",
     department: "Chemical Engineering",
     year: 3,
