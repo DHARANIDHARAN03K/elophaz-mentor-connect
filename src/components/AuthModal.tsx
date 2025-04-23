@@ -89,8 +89,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
     
     window.localStorage.setItem("userRole", mode);
     
-    // Dispatch event to notify components of role change
-    window.dispatchEvent(new Event('userRoleChanged'));
+    // Ensure the userRoleChanged event is dispatched properly
+    window.dispatchEvent(new CustomEvent('userRoleChanged'));
     
     toast({
       title: selectedTab === 'login' ? "Login successful" : "Account created!",
@@ -100,6 +100,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
           : `Your ${mode} account has been created successfully.`,
     });
     
+    // Reset form fields
     setCollegeIdFile(null);
     setCollegeIdFileName('');
     setCollegeMail('');
@@ -114,8 +115,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, tabDefault
   const handleGoogleSignup = () => {
     window.localStorage.setItem("userRole", mode);
     
-    // Dispatch event to notify components of role change
-    window.dispatchEvent(new Event('userRoleChanged'));
+    // Ensure the userRoleChanged event is dispatched properly
+    window.dispatchEvent(new CustomEvent('userRoleChanged'));
     
     toast({
       title: 'Google Sign Up',

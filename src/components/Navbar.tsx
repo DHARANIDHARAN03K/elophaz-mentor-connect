@@ -7,6 +7,7 @@ import DashboardMenu from './DashboardMenu';
 import NavbarLinks from './NavbarLinks';
 import AuthButtons from './AuthButtons';
 import MobileMenu from './MobileMenu';
+import { useLocation } from 'react-router-dom';
 
 // Simulate getting user and role from localStorage.
 // Replace with your actual Supabase logic when ready.
@@ -15,14 +16,15 @@ const getCurrentUser = () => {
 }
 
 const Navbar: React.FC = () => {
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'student' | 'mentor'>('student');
   const [authTab, setAuthTab] = useState<'login' | 'signup'>('signup');
   // Add state to track user role
-  const [userRole, setUserRole] = useState<"student" | "mentor" | null>(getCurrentUser() as "student" | "mentor" | null);
+  const [userRole, setUserRole] = useState<"student" | "mentor" | null>(null);
 
-  // Update userRole when localStorage changes
+  // Update userRole immediately on component mount and when localStorage changes
   useEffect(() => {
     const checkUserRole = () => {
       const currentRole = getCurrentUser();
@@ -44,13 +46,11 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  // Force a role check on every route change/page load
+  // Force a role check on every route change
   useEffect(() => {
     const currentRole = getCurrentUser();
-    if (currentRole !== userRole) {
-      setUserRole(currentRole as "student" | "mentor" | null);
-    }
-  }, [window.location.pathname]);
+    setUserRole(currentRole as "student" | "mentor" | null);
+  }, [location.pathname]);
 
   // Logout handler 
   const handleLogout = () => {
@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
     setUserRole(null);
     
     // Dispatch event to notify other components
-    window.dispatchEvent(new Event('userRoleChanged'));
+    window.dispatchEvent(new CustomEvent('userRoleChanged'));
     
     window.location.href = "/";
   };
