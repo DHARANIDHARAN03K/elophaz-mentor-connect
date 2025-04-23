@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import AuthModal from './AuthModal';
 import DashboardMenu from './DashboardMenu';
+import NavbarLinks from './NavbarLinks';
+import AuthButtons from './AuthButtons';
+import MobileMenu from './MobileMenu';
 
 // Simulate getting user and role from localStorage.
 // Replace with your actual Supabase logic when ready.
@@ -74,36 +77,6 @@ const Navbar: React.FC = () => {
     setIsMenuOpen(false);
   };
 
-  // Navigation links for role
-  const studentLinks = [
-    { label: "Home", href: "/" },
-    { label: "Features", href: "#features" },
-    { label: "Mentors", href: "#mentors" },
-    { label: "FAQ", href: "#faq" },
-    { label: "Dashboard", href: "/student/dashboard" },
-    { label: "Logout", action: handleLogout },
-  ];
-  const mentorLinks = [
-    { label: "Home", href: "/" },
-    { label: "Features", href: "#features" },
-    { label: "FAQ", href: "#faq" },
-    { label: "Dashboard", href: "/mentor/dashboard" },
-    { label: "Logout", action: handleLogout },
-  ];
-
-  // Hide Dashboard/Logout nav links when using DashboardMenu (desktop)
-  const desktopStudentLinks = [
-    { label: "Home", href: "/" },
-    { label: "Features", href: "#features" },
-    { label: "Mentors", href: "#mentors" },
-    { label: "FAQ", href: "#faq" },
-  ];
-  const desktopMentorLinks = [
-    { label: "Home", href: "/" },
-    { label: "Features", href: "#features" },
-    { label: "FAQ", href: "#faq" },
-  ];
-
   return (
     <>
       <nav className="w-full py-4 px-4 md:px-10 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
@@ -115,50 +88,9 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          {/* Show correct links based on role */}
-          {(userRole === "student"
-            ? desktopStudentLinks
-            : userRole === "mentor"
-            ? desktopMentorLinks
-            : desktopStudentLinks
-          ).map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-gray-600 hover:text-elophaz-primary transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
+          <NavbarLinks userRole={userRole} handleLogout={handleLogout} />
 
-          {userRole && (
-            <DashboardMenu role={userRole} onLogout={handleLogout} />
-          )}
-
-          {!userRole && (
-            <div className="flex items-center gap-3">
-              <Button 
-                className="bg-elophaz-primary hover:bg-elophaz-primary/90"
-                onClick={() => openAuthModal('mentor', 'signup')}
-              >
-                Become a Mentor
-              </Button>
-              <Button
-                variant="outline"
-                className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10"
-                onClick={() => openAuthModal('student', 'signup')}
-              >
-                Sign Up
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-elophaz-primary"
-                onClick={() => openAuthModal('student', 'login')}
-              >
-                Log In
-              </Button>
-            </div>
-          )}
+          {!userRole && <AuthButtons openAuthModal={openAuthModal} />}
         </div>
 
         {/* Mobile Menu Button */}
@@ -171,73 +103,13 @@ const Navbar: React.FC = () => {
         </button>
       </nav>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden fixed top-16 left-0 right-0 bg-white z-40 shadow-md animate-fade-in py-4 px-6">
-          <div className="flex flex-col gap-4">
-            {/* Show ALL links in mobile, including Dashboard/Logout */}
-            {(userRole === "student"
-              ? studentLinks
-              : userRole === "mentor"
-              ? mentorLinks
-              : desktopStudentLinks
-            ).map((link) => (
-              link.action ? (
-                <button
-                  key={link.label}
-                  onClick={() => {
-                    link.action && link.action();
-                    setIsMenuOpen(false);
-                  }}
-                  className="text-gray-600 hover:text-elophaz-primary transition-colors py-2 text-left"
-                >
-                  {link.label}
-                </button>
-              ) : (
-                <a 
-                  key={link.label}
-                  href={link.href}
-                  className="text-gray-600 hover:text-elophaz-primary transition-colors py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
-              )
-            ))}
-
-            {userRole && (
-              <div className="flex flex-col gap-3 pt-2">
-                <DashboardMenu role={userRole} onLogout={handleLogout} />
-              </div>
-            )}
-
-            {!userRole && (
-              <div className="flex flex-col gap-3 pt-2">
-                <Button 
-                  className="bg-elophaz-primary hover:bg-elophaz-primary/90 w-full"
-                  onClick={() => openAuthModal('mentor', 'signup')}
-                >
-                  Become a Mentor
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-elophaz-primary text-elophaz-primary hover:bg-elophaz-primary/10 w-full"
-                  onClick={() => openAuthModal('student', 'signup')}
-                >
-                  Sign Up
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="text-elophaz-primary w-full"
-                  onClick={() => openAuthModal('student', 'login')}
-                >
-                  Log In
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      <MobileMenu
+        userRole={userRole}
+        handleLogout={handleLogout}
+        isOpen={isMenuOpen}
+        setIsOpen={setIsMenuOpen}
+        openAuthModal={openAuthModal}
+      />
 
       <AuthModal 
         isOpen={isAuthModalOpen} 
