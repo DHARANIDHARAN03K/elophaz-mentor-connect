@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,6 +16,15 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+
+    <!-- Firestore (optional, for storing user data like role) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
   </head>
 
   <body>
@@ -22,5 +32,23 @@
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Firebase Initialization -->
+    <script>
+      // Replace these values with your actual Firebase config from Firebase Console
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "your-app.firebaseapp.com",
+        projectId: "your-app",
+        storageBucket: "your-app.appspot.com",
+        messagingSenderId: "XXXXXXXXX",
+        appId: "APP_ID"
+      };
+
+      // Initialize Firebase
+      const app = firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+    </script>
   </body>
 </html>
+
