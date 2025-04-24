@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { useAuth } from '@/contexts/AuthContext';
 import AuthModal from './AuthModal';
 import DashboardMenu from './DashboardMenu';
 import NavbarLinks from './NavbarLinks';
 import AuthButtons from './AuthButtons';
 import MobileMenu from './MobileMenu';
 import { useLocation } from 'react-router-dom';
-
-const getCurrentUser = () => {
-  return window.localStorage.getItem("userRole"); // 'student' | 'mentor' | null
-};
+import { useToast } from '@/hooks/use-toast';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -17,34 +17,24 @@ const Navbar: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'student' | 'mentor'>('student');
   const [authTab, setAuthTab] = useState<'login' | 'signup'>('signup');
-  const [userRole, setUserRole] = useState<"student" | "mentor" | null>(null);
+  const { user } = useAuth();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    const checkUserRole = () => {
-      const currentRole = getCurrentUser();
-      setUserRole(currentRole as "student" | "mentor" | null);
-    };
-
-    checkUserRole();
-    window.addEventListener('storage', checkUserRole);
-    window.addEventListener('userRoleChanged', checkUserRole);
-    
-    return () => {
-      window.removeEventListener('storage', checkUserRole);
-      window.removeEventListener('userRoleChanged', checkUserRole);
-    };
-  }, []);
-
-  useEffect(() => {
-    const currentRole = getCurrentUser();
-    setUserRole(currentRole as "student" | "mentor" | null);
-  }, [location.pathname]);
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("userRole");
-    setUserRole(null);
-    window.dispatchEvent(new CustomEvent('userRoleChanged'));
-    window.location.href = "/";
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account.",
+      });
+      window.location.href = "/";
+    } catch (error) {
+      toast({
+        title: "Error logging out",
+        description: "There was a problem logging out. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const openAuthModal = (
@@ -57,6 +47,8 @@ const Navbar: React.FC = () => {
     setIsMenuOpen(false);
   };
 
+  const userRole = user?.customClaims?.role || localStorage.getItem("userRole");
+
   return (
     <>
       <nav className="w-full py-4 px-4 md:px-10 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
@@ -68,8 +60,7 @@ const Navbar: React.FC = () => {
 
         <div className="hidden md:flex items-center gap-6">
           <NavbarLinks userRole={userRole} handleLogout={handleLogout} />
-
-          {!userRole && <AuthButtons openAuthModal={openAuthModal} />}
+          {!user && <AuthButtons openAuthModal={openAuthModal} />}
         </div>
 
         <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
