@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { signOut } from 'firebase/auth';
@@ -27,6 +28,8 @@ const Navbar: React.FC = () => {
         title: "Logged out successfully",
         description: "You have been logged out of your account.",
       });
+      // Clear role from localStorage when logging out
+      localStorage.removeItem("userRole");
       window.location.href = "/";
     } catch (error) {
       toast({
@@ -47,7 +50,8 @@ const Navbar: React.FC = () => {
     setIsMenuOpen(false);
   };
 
-  const userRole = user?.customClaims?.role || localStorage.getItem("userRole");
+  // Get user role from localStorage instead of customClaims
+  const userRole = user ? localStorage.getItem("userRole") : null;
 
   return (
     <>
@@ -59,7 +63,7 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6">
-          <NavbarLinks userRole={userRole} handleLogout={handleLogout} />
+          <NavbarLinks userRole={userRole as 'student' | 'mentor' | null} handleLogout={handleLogout} />
           {!user && <AuthButtons openAuthModal={openAuthModal} />}
         </div>
 
@@ -73,7 +77,7 @@ const Navbar: React.FC = () => {
       </nav>
 
       <MobileMenu
-        userRole={userRole}
+        userRole={userRole as 'student' | 'mentor' | null}
         handleLogout={handleLogout}
         isOpen={isMenuOpen}
         setIsOpen={setIsMenuOpen}
